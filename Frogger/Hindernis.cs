@@ -1,48 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Frogger
 {
+    /// <summary>
+    /// Diese Klasse beinhaltet ein Rechteck und weitere Felder, zur Darstellung eines Hindernisses.
+    /// </summary>
     public class Hindernis
     {
-        // Diese Klasse beinhaltet alle Felder, die zur Darstellung eines Hindernisses notwendig ist.
+        private Rectangle hitbox;
+        private int speed;
+        private Color color;
+        private SolidBrush brush;
 
-        // Position
-        public int X;
-        public int Y;
-
-        // Dimension
-        public int Width;
-        public int Height;
-
-        // Geschwindigkeit
-        public int Speed;
-
-        // Zeichenmittel
-        // Damit man Zeichenmittel nutzen kann, muss System.Drawing importiert werden (oben bei using...)
-        public Color Color;
-        public SolidBrush Brush;
-
-
-        public Hindernis(int X, int Y, int Width, int Height, int Speed, Color Color)
+        public Hindernis(int x, int y, int width, int height, int speed, Color color)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
-            this.Speed = Speed;
-            this.Color = Color;
-            this.Brush = new SolidBrush(Color);
+            this.hitbox = new Rectangle(x, y, width, height);
+            this.speed = speed;
+
+            // Damit man Zeichenmittel nutzen kann, muss System.Drawing importiert werden (oben bei using...)
+            this.color = color;
+            this.brush = new SolidBrush(color);
         }
+
+        /// <summary>
+        /// Zugriff auf die X-Eigenschaft des beinhalteten Rechtecks
+        /// </summary>
+        public int X
+        {
+            get { return hitbox.X; }
+        }
+        public int Y
+        {
+            get { return hitbox.Y; }
+        }
+
+        public int Width
+        {
+            get { return hitbox.Width; }
+        }
+        public int Height
+        {
+            get { return hitbox.Height; }
+        }
+
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
+
 
         public void Move()
         {
-            this.X = this.X - Speed;
+            hitbox.X  = hitbox.X - Speed;
         }
 
+        public Color Color
+        {
+            get { return color; }
+            set { color = value; }
+        }
+
+        public SolidBrush Brush
+        {
+            get { return brush; }
+            set { brush = value; }
+        }
     }
 }
