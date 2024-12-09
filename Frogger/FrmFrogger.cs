@@ -34,22 +34,7 @@ namespace Frogger
         {
             if(tmrGameTick.Enabled == false)
             {
-                breite = this.ClientSize.Width;
-                hoehe = this.ClientSize.Height;
-
-                hoeheJeBereich = hoehe / anzahlBereiche;
-
-                //Puffer für Rundungsfehler
-                hoeheJeBereich = hoeheJeBereich + 2;
-
-                spieler = new Rectangle((breite / 2) - 15, hoehe - 35, 30, 30);
-
-                for (int i = 0; i < alleBahnen.Length; i++)
-                {
-                    alleBahnen[i] = new Rectangle(0, i * hoeheJeBereich, breite, hoeheJeBereich);
-                }
-
-                tmrGameTick.Start();
+                SpielNeustarten();
             }
 
 
@@ -81,51 +66,84 @@ namespace Frogger
 
         }
 
+        private void SpielNeustarten()
+        {
+            breite = this.ClientSize.Width;
+            hoehe = this.ClientSize.Height;
+
+            hoeheJeBereich = hoehe / anzahlBereiche;
+
+            //Puffer für Rundungsfehler
+            hoeheJeBereich = hoeheJeBereich + 2;
+
+            spieler = new Rectangle((breite / 2) - 15, hoehe - 35, 30, 30);
+
+            for (int i = 0; i < alleBahnen.Length; i++)
+            {
+                alleBahnen[i] = new Rectangle(0, i * hoeheJeBereich, breite, hoeheJeBereich);
+            }
+
+            tmrGameTick.Start();
+        }
+
         private void tmrGameTick_Tick(object sender, EventArgs e)
         {
-            spawnZaehler++;
-            if(spawnZaehler == spawnRate)
-            {
-                spawnZaehler = 0;
-
-                int zufall = rndBahn.Next(1, anzahlBereiche-1);
-                int yWertDerBahn = alleBahnen[zufall].Top;
-
-                alleHindernisse.Add(new Hindernis(breite, yWertDerBahn, 60, hoeheJeBereich, 10, Color.Red));
-            }
-
-            foreach (Hindernis aktuellesHindernis in alleHindernisse)
-            {
-                aktuellesHindernis.Move();
-            }
-
-            for(int i = alleHindernisse.Count -1; i >= 0; i--)
-            { 
-                if ((alleHindernisse[i].Hitbox.X + alleHindernisse[i].Hitbox.Width) < 0)
-                {
-                    alleHindernisse.RemoveAt(i);
-
-                }
-            }
+            HindernisseErstellen();
+            HindernisseBewegen();
+            HindernisseEntfernen();
 
             // TODO Kontrollieren, ob Spieler überfahren wurde.
 
             this.Refresh();
         }
 
+        private void HindernisseEntfernen()
+        {
+            for (int i = alleHindernisse.Count - 1; i >= 0; i--)
+            {
+                if ((alleHindernisse[i].Hitbox.X + alleHindernisse[i].Hitbox.Width) < 0)
+                {
+                    alleHindernisse.RemoveAt(i);
+
+                }
+            }
+        }
+
+        private void HindernisseBewegen()
+        {
+            foreach (Hindernis aktuellesHindernis in alleHindernisse)
+            {
+                aktuellesHindernis.Move();
+            }
+        }
+
+        private void HindernisseErstellen()
+        {
+            spawnZaehler++;
+            if (spawnZaehler == spawnRate)
+            {
+                spawnZaehler = 0;
+
+                int zufall = rndBahn.Next(1, anzahlBereiche - 1);
+                int yWertDerBahn = alleBahnen[zufall].Top;
+
+                alleHindernisse.Add(new Hindernis(breite, yWertDerBahn, 60, hoeheJeBereich, 10, Color.Red));
+            }
+        }
+
         private void FrmFrogger_KeyDown(object sender, KeyEventArgs e)
         {
             // TODO Weitere Bewegungen (links, rechts) einbauen
 
-            // TODO Wenn Spieler im Ziel ist, soll er wieder auf Start zurückgesetzt werden und das Spiel soll schwerer werden
             if (e.KeyCode == Keys.Up)
             {
+                // TODO Wenn Spieler im Ziel ist, soll er wieder auf Start zurückgesetzt werden und das Spiel soll schwerer werden
                 spieler.Y = spieler.Y - hoeheJeBereich;
             }
 
-            // TODO Spieler darf nicht nach unten aus dem Spielfeld laufen
             if(e.KeyCode == Keys.Down)
             {
+                // TODO Spieler darf nicht nach unten aus dem Spielfeld laufen
                 spieler.Y = spieler.Y + hoeheJeBereich;
             }
 
