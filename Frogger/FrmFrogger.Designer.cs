@@ -28,13 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.tmrGameTick = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // tmrGameTick
-            // 
-            this.tmrGameTick.Tick += new System.EventHandler(this.tmrGameTick_Tick);
             // 
             // FrmFrogger
             // 
@@ -54,8 +48,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer tmrGameTick;
     }
 }
 

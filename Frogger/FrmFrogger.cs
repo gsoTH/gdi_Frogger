@@ -18,6 +18,7 @@ namespace Frogger
         int spawnRate = 14;
         int spawnZaehler = 0;
         Random rndBahn = new Random();
+        System.Windows.Forms.Timer tmrGame = new System.Windows.Forms.Timer();
 
 
         public FrmFrogger()
@@ -28,11 +29,13 @@ namespace Frogger
         private void FrmFrogger_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
+            tmrGame.Tick += new EventHandler(tmrGame_Tick);
+            tmrGame.Interval = 100;
         }
 
         private void FrmFrogger_Paint(object sender, PaintEventArgs e)
         {
-            if(tmrGameTick.Enabled == false)
+            if(tmrGame.Enabled == false)
             {
                 SpielNeustarten();
             }
@@ -83,10 +86,10 @@ namespace Frogger
                 alleBahnen[i] = new Rectangle(0, i * hoeheJeBereich, breite, hoeheJeBereich);
             }
 
-            tmrGameTick.Start();
+            tmrGame.Start();
         }
 
-        private void tmrGameTick_Tick(object sender, EventArgs e)
+        private void tmrGame_Tick(object sender, EventArgs e)
         {
             HindernisseErstellen();
             HindernisseBewegen();
